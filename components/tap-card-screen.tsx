@@ -2,8 +2,9 @@
 
 import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import { Wifi, Factory } from "lucide-react"
+import { Wifi, Factory, Loader2 } from "lucide-react"
 import { useApp } from "@/contexts/app-context"
+import { useState } from "react"
 
 interface TapCardScreenProps {
   onCardTap: () => void
@@ -11,6 +12,15 @@ interface TapCardScreenProps {
 
 export function TapCardScreen({ onCardTap }: TapCardScreenProps) {
   const { massProductionMode, setMassProductionMode } = useApp()
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleCardTap = () => {
+    setIsLoading(true)
+    setTimeout(() => {
+      onCardTap()
+      setIsLoading(false)
+    }, 500)
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-6">
@@ -25,10 +35,17 @@ export function TapCardScreen({ onCardTap }: TapCardScreenProps) {
       {/* Main Card Tap Area */}
       <div className="mb-8 flex flex-col items-center">
         <button
-          className="relative mb-6 flex h-64 w-64 cursor-pointer items-center justify-center rounded-full border-4 border-primary/30 bg-card/50 backdrop-blur-sm transition-all duration-300 active:scale-90 active:bg-primary/20"
-          onClick={onCardTap}
+          className={`relative mb-6 flex h-64 w-64 cursor-pointer items-center justify-center rounded-full border-4 border-primary/30 bg-card/50 backdrop-blur-sm transition-all duration-300 ${
+            isLoading ? "scale-110 bg-primary/30" : "active:scale-90 active:bg-primary/20"
+          }`}
+          onClick={handleCardTap}
+          disabled={isLoading}
         >
-          <Wifi className="h-24 w-24 text-primary" />
+          {isLoading ? (
+            <Loader2 className="h-24 w-24 text-primary animate-spin" />
+          ) : (
+            <Wifi className="h-24 w-24 text-primary" />
+          )}
         </button>
 
         <p className="max-w-xs text-center text-sm text-muted-foreground">

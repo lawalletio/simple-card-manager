@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useApp } from "@/contexts/app-context";
 import { useCurrentCard } from "@/contexts/card-context";
+import { usePrint } from "@/hooks/use-print";
 
 interface PrintActivationScreenProps {
   onBack: () => void;
@@ -23,30 +24,44 @@ export function PrintActivationScreen({ onBack }: PrintActivationScreenProps) {
   const [printComplete, setPrintComplete] = useState(false);
   const [paperPosition, setPaperPosition] = useState(0);
   const { isReady, getOTC } = useCurrentCard();
+  const [activationUrl, setActivationUrl] = useState<string | null>(null);
+
+  const { print } = usePrint();
 
   const { massProductionMode } = useApp();
 
-  useEffect(() => {
-    if (massProductionMode) {
-      startPrinting();
-    }
-  }, [massProductionMode]);
+  // useEffect(() => {
+  //   if (massProductionMode) {
+  //     startPrinting();
+  //   }
+  // }, [massProductionMode]);
 
   useEffect(() => {
-    if (isReady && !printComplete) {
+    if (activationUrl) {
+      startPrintAnimation();
+      setTimeout(() => {
+        print({
+          qrcode: activationUrl,
+          message: "Activá tu tarjeta",
+        });
+      }, 100);
+    }
+  }, [activationUrl]);
+
+  useEffect(() => {
+    if (isReady && !printComplete && !isPrinting) {
       getOTC().then((otc) => {
-        alert(JSON.stringify(otc.url));
+        setActivationUrl(otc.url);
       });
-      startPrinting();
     }
-  }, [isReady, printComplete]);
+  }, [isReady, printComplete, isPrinting]);
 
-  const startPrinting = () => {
+  const startPrintAnimation = () => {
     setIsPrinting(true);
     setPrintComplete(false);
     setPaperPosition(0);
 
-    const animationDuration = 5000; // 5 seconds
+    const animationDuration = 1000; // 5 seconds
     const startTime = Date.now();
 
     const animatePaper = () => {
@@ -74,9 +89,7 @@ export function PrintActivationScreen({ onBack }: PrintActivationScreenProps) {
     };
 
     // Start animation after a brief delay
-    setTimeout(() => {
-      requestAnimationFrame(animatePaper);
-    }, 500);
+    requestAnimationFrame(animatePaper);
   };
 
   if (!isReady) {
@@ -119,16 +132,11 @@ export function PrintActivationScreen({ onBack }: PrintActivationScreenProps) {
             <div className='text-center py-8'>
               <FileText className='h-16 w-16 text-muted-foreground mx-auto mb-4' />
               <p className='text-muted-foreground mb-6'>
-                Ready to print your card activation receipt
+                Generating activation receipt...
+                <div className='flex justify-center mb-4'>
+                  <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+                </div>
               </p>
-              <Button
-                onClick={startPrinting}
-                className='bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8'
-                size='lg'
-              >
-                <Printer className='mr-2 h-4 w-4' />
-                Start Printing
-              </Button>
             </div>
           )}
 

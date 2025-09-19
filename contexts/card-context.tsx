@@ -34,8 +34,6 @@ export function CardProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      cardResponse.callback = "https://agustin.masize.com/api/test";
-
       const response = await fetch(cardResponse.callback, {
         method: "GET",
         headers: {

@@ -1,11 +1,4 @@
 export interface PrintOrder {
-  total: number;
-  totalSats: number;
-  currency: string;
-
-  blockNumber?: string;
-  imageUrl?: string;
+  message?: string;
   qrcode?: string;
-  currencyB?: string;
-  totalB?: string;
 }

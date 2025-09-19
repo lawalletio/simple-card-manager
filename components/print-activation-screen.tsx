@@ -28,7 +28,7 @@ export function PrintActivationScreen({ onBack }: PrintActivationScreenProps) {
     setPrintComplete(false)
     setPaperPosition(0)
 
-    const animationDuration = 3000 // 3 seconds
+    const animationDuration = 5000 // 5 seconds
     const startTime = Date.now()
 
     const animatePaper = () => {
@@ -121,14 +121,14 @@ export function PrintActivationScreen({ onBack }: PrintActivationScreenProps) {
               </div>
 
               <div className="relative bg-muted/30 rounded-lg h-64 overflow-hidden border-2 border-dashed border-muted-foreground/20">
-                {/* Printer slot at top */}
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-2 bg-muted-foreground/40 rounded-b-lg"></div>
+                {/* Printer slot at bottom */}
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-32 h-2 bg-muted-foreground/40 rounded-t-lg"></div>
 
-                {/* Animated paper with QR code */}
+                {/* Animated paper with QR code emerging from bottom */}
                 <div
                   className="absolute left-1/2 transform -translate-x-1/2 w-40 bg-white rounded-lg shadow-lg border transition-all duration-100"
                   style={{
-                    bottom: `${20 - paperPosition}%`,
+                    bottom: `${-100 + paperPosition * 1.2}%`,
                     height: "180px",
                   }}
                 >

@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import { Wifi, Factory, Loader2 } from "lucide-react"
+import { Nfc, Factory, Loader2 } from "lucide-react"
 import { useApp } from "@/contexts/app-context"
 import { useState } from "react"
 
@@ -35,7 +35,7 @@ export function TapCardScreen({ onCardTap }: TapCardScreenProps) {
       {/* Main Card Tap Area */}
       <div className="mb-8 flex flex-col items-center">
         <button
-          className={`relative mb-6 flex h-64 w-64 cursor-pointer items-center justify-center rounded-full border-4 border-primary/30 bg-card/50 backdrop-blur-sm transition-all duration-300 ${
+          className={`relative mb-6 flex h-64 w-64 cursor-pointer items-center justify-center rounded-full border-8 border-primary/30 bg-card/50 backdrop-blur-sm transition-all duration-300 ${
             isLoading ? "scale-110 bg-primary/30" : "active:scale-90 active:bg-primary/20"
           }`}
           onClick={handleCardTap}
@@ -44,7 +44,7 @@ export function TapCardScreen({ onCardTap }: TapCardScreenProps) {
           {isLoading ? (
             <Loader2 className="h-24 w-24 text-primary animate-spin" />
           ) : (
-            <Wifi className="h-24 w-24 text-primary" />
+            <Nfc className="h-24 w-24 text-primary" />
           )}
         </button>
 

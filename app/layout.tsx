@@ -1,32 +1,31 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Analytics } from "@vercel/analytics/next"
-import "./globals.css"
-import { AppProvider } from "@/contexts/app-context"
-import { ThemeProvider } from "next-themes"
-import { Suspense } from "react"
+"use client";
 
-export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
-}
+import type React from "react";
+import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import "./globals.css";
+import { AppProvider } from "@/contexts/app-context";
+import { Suspense } from "react";
+import { InjectedNFCProvider } from "@/contexts/injected-nfc";
+import { CardProvider } from "@/contexts/card-context";
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="antialiased">
+    <html lang='en' className='dark'>
+      <body className='antialiased'>
         <AppProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
-          </ThemeProvider>
+          <InjectedNFCProvider>
+            <CardProvider>
+              <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+            </CardProvider>
+          </InjectedNFCProvider>
         </AppProvider>
         <Analytics />
       </body>
     </html>
-  )
+  );
 }
